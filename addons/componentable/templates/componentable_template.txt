@@ -1,0 +1,4 @@
+class_name <Type>Component extends Node
+
+@export var active = true
+@export var <type>: <Type>
