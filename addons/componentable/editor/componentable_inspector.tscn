@@ -27,6 +27,7 @@ non_componentable = NodePath("NonComponentableList")
 componentable_display = NodePath("IsComponentable")
 
 [node name="IsComponentable" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 2
 
 [node name="ComponentableList" type="VBoxContainer" parent="IsComponentable"]

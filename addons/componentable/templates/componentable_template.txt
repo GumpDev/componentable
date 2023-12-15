@@ -1,4 +1,10 @@
 class_name <Type>Component extends Node
 
-@export var active = true
+@export var active = true : set = _set_active
 @export var <type>: <Type>
+
+func _set_active(_active: bool):
+	active = _active
+	set_process(active)
+	set_process_input(active)
+	set_physics_process(active)
