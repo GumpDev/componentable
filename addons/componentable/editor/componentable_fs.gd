@@ -42,7 +42,12 @@ static func get_custom_class_name(path: String):
 			return cls.class
 	return null
 
+static func create_folder():
+	if not DirAccess.dir_exists_absolute("res://addons/componentable/components"):
+		DirAccess.make_dir_absolute("res://addons/componentable/components")
+
 static func create_component(node: Node):
+	create_folder()
 	var file = FileAccess.open("res://addons/componentable/components/%s.gd" % get_component_script_name(node), FileAccess.WRITE)
 	file.store_string(get_template(node, get_class_name(node)))
 	file.close()

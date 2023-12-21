@@ -102,3 +102,4 @@ metadata/components = {}
 [node name="Button" type="Button" parent="NonComponentableList"]
 layout_mode = 2
 text = "Create Componentable"
+metadata/components = {}
