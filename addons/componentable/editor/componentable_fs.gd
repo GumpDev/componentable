@@ -2,7 +2,7 @@ class_name ComponentableFs extends Node
 
 static func get_template(node: Node, cl_name: String):
 	var file = FileAccess.open("res://addons/componentable/templates/componentable_template.txt", FileAccess.READ)
-	var text = file.get_as_text().replace("<type>", cl_name.to_snake_case()).replace("<Type>", cl_name.to_pascal_case())
+	var text = file.get_as_text().replace("<type>", cl_name.to_snake_case()).replace("<Type>", cl_name)
 	file.close()
 	return text
 

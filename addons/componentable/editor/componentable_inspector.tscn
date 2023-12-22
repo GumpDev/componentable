@@ -14,7 +14,7 @@ font_size = 12
 font_color = Color(0.823529, 0.823529, 0.823529, 1)
 outline_size = 1
 
-[node name="Componentable" type="VBoxContainer" node_paths=PackedStringArray("componentable_btn", "recomponentable_btn", "non_componentable", "componentable_display")]
+[node name="Componentable" type="VBoxContainer" node_paths=PackedStringArray("componentable_btn", "recomponentable_btn", "non_componentable", "components_list", "componentable_display")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -24,6 +24,7 @@ script = ExtResource("1_jiawe")
 componentable_btn = NodePath("NonComponentableList/Button")
 recomponentable_btn = NodePath("IsComponentable/ResetComponentable")
 non_componentable = NodePath("NonComponentableList")
+components_list = NodePath("IsComponentable/ComponentableList")
 componentable_display = NodePath("IsComponentable")
 
 [node name="IsComponentable" type="VBoxContainer" parent="."]

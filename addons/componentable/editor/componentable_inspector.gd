@@ -1,10 +1,10 @@
 @tool
-class_name ComponentableInspectorTree extends Control
+class_name ComponentableInspectorTree extends VBoxContainer
 
 @export var componentable_btn: Button
 @export var recomponentable_btn: Button
 @export var non_componentable: VBoxContainer
-@export var components_tree: Tree
+@export var components_list: VBoxContainer
 @export var componentable_display: VBoxContainer
 
 var node: Node
@@ -29,17 +29,20 @@ func create_components_list():
 		txt.text = "No components found for this componentable"
 		txt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		txt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		components_list.add_child(txt)
 		return
 	
 	for component in ComponentableFs.get_components(node):
 		var checkbutton = CheckButton.new()
 		checkbutton.text = component.class
+		checkbutton.button_pressed = Component.has(node, component.class)
 		checkbutton.button_up.connect(func ():
 			if checkbutton.button_pressed:
 				Component.subscribe(node, component.class)
 			else:
 				Component.unsubscribe(node, component.class)
 		)
+		components_list.add_child(checkbutton)
 
 func _on_clicked_componentable():
 	Component.componentable(node)
