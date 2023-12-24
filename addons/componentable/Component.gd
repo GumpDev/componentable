@@ -1,4 +1,3 @@
-@tool # Needed to work inside editor
 class_name Component extends Object
 
 static func componentable(node: Node):
