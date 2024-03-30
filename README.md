@@ -168,7 +168,6 @@ Component.get_all(node) # return all components in this componentable
 
 ## 🤔 FAQ
 
-- **Why you created that?** _Cuz is so boring to create an Item with a custom name in Bukkit, it's more than 4 lines, and I'm lazy_
 - **I Found a BUG!** _[Click here](https://github.com/GumpDev/componentable/issues) and open an issue_
 - **Can I help with the project?** _Sure! just send your PR :D_
 - **Can I contact you?** _Yep, send email to contact@gump.dev_
