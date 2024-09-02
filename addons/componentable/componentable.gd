@@ -1,11 +1,11 @@
 @tool
 extends EditorPlugin
 
-var inspector_plugin: EditorInspectorPlugin
+var componentable_ui: Control
 
 func _enter_tree():
-	inspector_plugin = preload("res://addons/componentable/editor/componentable_inspector_plugin.gd").new()
-	add_inspector_plugin(inspector_plugin)
+	componentable_ui = preload("res://addons/componentable/editor/componentable_inspector.tscn").instantiate()
+	add_control_to_dock(DockSlot.DOCK_SLOT_RIGHT_UL, componentable_ui)
 
 func _exit_tree():
-	remove_inspector_plugin(inspector_plugin)
+	remove_control_from_docks(componentable_ui)

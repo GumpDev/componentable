@@ -48,7 +48,9 @@ static func create_folder():
 
 static func create_component(node: Node):
 	create_folder()
-	var file = FileAccess.open("res://addons/componentable/components/%s.gd" % get_component_script_name(node), FileAccess.WRITE)
+	var file_name = "res://addons/componentable/components/%s.gd" % get_component_script_name(node)
+	if (FileAccess.file_exists(file_name)): return
+	var file = FileAccess.open(file_name, FileAccess.WRITE)
 	file.store_string(get_template(node, get_class_name(node)))
 	file.close()
 	
@@ -67,3 +69,10 @@ static func get_components(node: Node):
 static func get_class_component(component_name: String):
 	return ProjectSettings.get_global_class_list() \
 		.filter(func (cls): return cls.class == component_name)[0]
+
+static func create_component_file(path: String, name: String, node: Node):
+	create_component(node)
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string("class_name %s extends %s" % [name.split(".")[0], get_component_script_name(node)])
+	file.close()
+	EditorInterface.edit_script(load(path))

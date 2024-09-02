@@ -1,57 +1,74 @@
 @tool
-class_name ComponentableInspectorTree extends VBoxContainer
+class_name ComponentableInspectorTree extends Tree
 
-@export var componentable_btn: Button
-@export var recomponentable_btn: Button
-@export var non_componentable: VBoxContainer
-@export var components_list: VBoxContainer
-@export var componentable_display: VBoxContainer
-
+var root: TreeItem
 var node: Node
+var create_button: TreeItem
 
-func init(_node: Node):
-	node = _node
+func _enter_tree() -> void:
+	EditorInterface.get_selection().selection_changed.connect(_selected_nodes)
+	item_activated.connect(_create_button)
+	
+func _exit_tree() -> void:
+	EditorInterface.get_selection().selection_changed.disconnect(_selected_nodes)
+	item_activated.disconnect(_create_button)
 
-func _ready():
-	if Component.is_componentable(node):
-		non_componentable.hide()
-		componentable_display.show()
-		recomponentable_btn.connect("button_down", _on_clicked_recomponentable)
-		create_components_list()
-	else:
-		componentable_display.hide()
-		non_componentable.show()
-		componentable_btn.connect("button_down", _on_clicked_componentable)
-
-func create_components_list():
-	if len(ComponentableFs.get_components(node)) == 0:
-		var txt = Label.new()
-		txt.text = "No components found for this componentable"
-		txt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		txt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		components_list.add_child(txt)
+func _selected_nodes():
+	var nodes = EditorInterface.get_selection().get_selected_nodes()
+	create_root()
+	
+	if len(nodes) != 1: 
+		select_error()
 		return
 	
-	for component in ComponentableFs.get_components(node):
-		var checkbutton = CheckButton.new()
-		checkbutton.text = component.class
-		checkbutton.button_pressed = Component.has(node, component.class)
-		checkbutton.button_up.connect(func ():
-			if checkbutton.button_pressed:
-				Component.subscribe(node, component.class)
-			else:
-				Component.unsubscribe(node, component.class)
-		)
-		components_list.add_child(checkbutton)
-
-func _on_clicked_componentable():
-	Component.componentable(node)
+	node = nodes[0]
+	var components = ComponentableFs.get_components(node)
 	
-func _on_clicked_recomponentable():
-	var confirmation = ConfirmationDialog.new()
-	confirmation.dialog_text = "You really want to reset the componentable? (this action will reset all components and your values)"
-	confirmation.confirmed.connect(func ():
-		ComponentWorker.reset_componentable(node)
-	)
-	get_tree().root.add_child(confirmation)
-	confirmation.popup_centered()
+	if len(components) == 0:
+		empty_error()
+	else:
+		for item in components:
+			create_component_item(item.class)
+		
+	create_create_component()
+
+func create_root():
+	clear()
+	root = create_item()
+	hide_root = true
+
+func select_error():
+	var item = create_item()
+	item.set_text(0, "Select one node to see the components!")
+	item.set_text_alignment(0, HORIZONTAL_ALIGNMENT_CENTER)
+
+func empty_error():
+	var item = create_item()
+	item.set_text(0, "This node has no components!")
+	item.set_text_alignment(0, HORIZONTAL_ALIGNMENT_CENTER)
+
+func create_component_item(name: String):
+	var item = create_item()
+	item.set_selectable(0, true)
+	item.set_cell_mode(0, TreeItem.CELL_MODE_CHECK)
+	item.set_text(0, name)
+	item.set_editable(0, true)
+
+func create_create_component():
+	var spacer = create_item()
+	spacer.set_text(0, " ")
+	spacer.set_selectable(0, false)
+	create_button = create_item()
+	create_button.set_text(0, "Create Component")
+	create_button.set_text_alignment(0, HORIZONTAL_ALIGNMENT_CENTER)
+	
+func _create_button():
+	if create_button.is_selected(0):
+		var file_dialog = FileDialog.new()
+		file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+		file_dialog.filters = ["*.gd"]
+		add_child(file_dialog)
+		file_dialog.popup_centered()
+		file_dialog.confirmed.connect(func (): ComponentableFs.create_component_file(file_dialog.current_path, file_dialog.current_file, node))
+		file_dialog.close_requested.connect(func (): file_dialog.queue_free())
+		
