@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://daql0s3l8p0up"]
+[gd_scene load_steps=3 format=3 uid="uid://daql0s3l8p0up"]
 
 [ext_resource type="Script" path="res://addons/componentable/editor/componentable_inspector.gd" id="1_jiawe"]
+[ext_resource type="Script" path="res://teste123.gd" id="2_4q53d"]
 
 [node name="Componentable" type="Tree"]
 anchors_preset = 15
@@ -10,6 +11,18 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+column_titles_visible = true
 enable_recursive_folding = false
 hide_root = true
 script = ExtResource("1_jiawe")
+metadata/components = {
+"teste123": NodePath("components/teste123")
+}
+
+[node name="components" type="Node" parent="."]
+metadata/component = true
+
+[node name="teste123" type="Node" parent="components" node_paths=PackedStringArray("componentable_inspector_tree")]
+script = ExtResource("2_4q53d")
+componentable_inspector_tree = NodePath("../..")
+metadata/component = true

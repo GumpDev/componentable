@@ -8,10 +8,12 @@ var create_button: TreeItem
 func _enter_tree() -> void:
 	EditorInterface.get_selection().selection_changed.connect(_selected_nodes)
 	item_activated.connect(_create_button)
+	item_edited.connect(_item_edited)
 	
 func _exit_tree() -> void:
 	EditorInterface.get_selection().selection_changed.disconnect(_selected_nodes)
 	item_activated.disconnect(_create_button)
+	item_edited.disconnect(_item_edited)
 
 func _selected_nodes():
 	var nodes = EditorInterface.get_selection().get_selected_nodes()
@@ -32,8 +34,17 @@ func _selected_nodes():
 		
 	create_create_component()
 
+func _item_edited():
+	var item = get_edited()
+	if item.is_checked(0):
+		ComponentWorker.subscribe(node, item.get_text(0))
+	else:
+		ComponentWorker.unsubscribe(node, item.get_text(0))
+
 func create_root():
 	clear()
+	set_column_title(0, "Components")
+	column_titles_visible = true
 	root = create_item()
 	hide_root = true
 
@@ -53,6 +64,7 @@ func create_component_item(name: String):
 	item.set_cell_mode(0, TreeItem.CELL_MODE_CHECK)
 	item.set_text(0, name)
 	item.set_editable(0, true)
+	item.set_checked(0, ComponentWorker.has_component(node, name))
 
 func create_create_component():
 	var spacer = create_item()
