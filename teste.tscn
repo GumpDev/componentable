@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://87evgrdg8fco"]
+
+[ext_resource type="Script" path="res://teste22.gd" id="1_4p07o"]
+
+[node name="teste" type="Node2D"]
+metadata/components = {
+"teste22": NodePath("components/teste22")
+}
+
+[node name="components" type="Node" parent="."]
+metadata/component = true
+
+[node name="teste22" type="Node" parent="components"]
+script = ExtResource("1_4p07o")
+metadata/component = true

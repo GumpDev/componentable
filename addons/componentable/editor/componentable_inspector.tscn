@@ -1,9 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://daql0s3l8p0up"]
+[gd_scene load_steps=2 format=3 uid="uid://daql0s3l8p0up"]
 
 [ext_resource type="Script" path="res://addons/componentable/editor/componentable_inspector.gd" id="1_jiawe"]
-[ext_resource type="Script" path="res://teste123.gd" id="2_4q53d"]
 
-[node name="Componentable" type="Tree"]
+[node name="Componentable" type="Tree" node_paths=PackedStringArray("file_dialog", "remove_component_dialog")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,13 +14,18 @@ column_titles_visible = true
 enable_recursive_folding = false
 hide_root = true
 script = ExtResource("1_jiawe")
-metadata/components = {
-"teste123": NodePath("components/teste123")
-}
+file_dialog = NodePath("SaveComponent")
+remove_component_dialog = NodePath("RemoveComponent")
+metadata/components = {}
 
-[node name="components" type="Node" parent="."]
-metadata/component = true
+[node name="SaveComponent" type="FileDialog" parent="."]
+initial_position = 2
+size = Vector2i(303, 180)
+dialog_hide_on_ok = true
+filters = PackedStringArray("*.gd")
 
-[node name="teste123" type="Node" parent="components"]
-script = ExtResource("2_4q53d")
-metadata/component = true
+[node name="RemoveComponent" type="ConfirmationDialog" parent="."]
+initial_position = 2
+size = Vector2i(481, 100)
+ok_button_text = "Remove"
+dialog_text = "Do you want to remove this component from the node?"

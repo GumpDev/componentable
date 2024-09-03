@@ -1,0 +1,1 @@
+class_name teste extends Node2DComponent

@@ -80,9 +80,3 @@ static func find(node: Node, component_name: String):
 
 static func node_is_component(node: Node):
 	return node.has_meta(COMPONENT_META)
-
-static func get_exports(node: Node):
-	var component_script: Script = node.get_script()
-	if component_script:
-		return component_script.get_script_property_list() \
-			.filter(func (prop): return prop['usage'] & PROPERTY_USAGE_EDITOR)
