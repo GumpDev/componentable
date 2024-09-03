@@ -22,7 +22,6 @@ metadata/components = {
 [node name="components" type="Node" parent="."]
 metadata/component = true
 
-[node name="teste123" type="Node" parent="components" node_paths=PackedStringArray("componentable_inspector_tree")]
+[node name="teste123" type="Node" parent="components"]
 script = ExtResource("2_4q53d")
-componentable_inspector_tree = NodePath("../..")
 metadata/component = true

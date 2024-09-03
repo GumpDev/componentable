@@ -1,7 +1,7 @@
 class_name <Type>Component extends Node
 
 @export var active = true : set = _set_active
-@export var <type>: <Type>
+var <type>: <Type>
 
 func _set_active(_active: bool):
 	active = _active

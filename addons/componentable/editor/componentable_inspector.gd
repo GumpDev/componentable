@@ -36,14 +36,18 @@ func _selected_nodes():
 
 func _item_edited():
 	var item = get_edited()
-	if item.is_checked(0):
-		ComponentWorker.subscribe(node, item.get_text(0))
-	else:
-		ComponentWorker.unsubscribe(node, item.get_text(0))
+	
+	if item.get_parent() == root:
+		if item.is_checked(0):
+			ComponentWorker.subscribe(node, item.get_text(0))
+		else:
+			ComponentWorker.unsubscribe(node, item.get_text(0))
+		update_properties(item)
 
 func create_root():
 	clear()
 	set_column_title(0, "Components")
+	columns = 1
 	column_titles_visible = true
 	root = create_item()
 	hide_root = true
@@ -65,7 +69,28 @@ func create_component_item(name: String):
 	item.set_text(0, name)
 	item.set_editable(0, true)
 	item.set_checked(0, ComponentWorker.has_component(node, name))
+	update_properties(item)
+	
+func update_properties(item: TreeItem):
+	if ComponentWorker.has_component(node, item.get_text(0)):
+		var component = ComponentWorker.find(node, item.get_text(0))
+		if not component: return
+		create_components_properties(component, item)
+	else:
+		for c in item.get_children():
+			item.remove_child(c)
+			c.free()
 
+func create_components_properties(component: Node, root_item: TreeItem):
+	var exports = ComponentWorker.get_exports(component)
+	for property in exports:
+		var item = root_item.create_child()
+		if property.type == 1:
+			item.set_cell_mode(0, TreeItem.CELL_MODE_CHECK)
+			item.set_editable(0, true)
+		item.set_text(0, property.name)
+		print(property)
+		
 func create_create_component():
 	var spacer = create_item()
 	spacer.set_text(0, " ")
