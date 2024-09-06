@@ -1,5 +1,21 @@
 class_name ComponentableFs extends Node
 
+const SUPPORTED_TYPES = [
+	TYPE_BOOL,
+	TYPE_INT,
+	TYPE_FLOAT,
+	TYPE_STRING,
+	TYPE_STRING_NAME,
+	TYPE_NODE_PATH,
+	TYPE_ARRAY,
+	TYPE_DICTIONARY,
+	TYPE_VECTOR2,
+	TYPE_VECTOR2I,
+	TYPE_VECTOR3,
+	TYPE_VECTOR3I,
+	TYPE_COLOR
+]
+
 static func get_template(node: Node, cl_name: String):
 	var file = FileAccess.open("res://addons/componentable/templates/componentable_template.txt", FileAccess.READ)
 	var text = file.get_as_text().replace("<type>", cl_name.to_snake_case()).replace("<Type>", cl_name)
@@ -7,28 +23,21 @@ static func get_template(node: Node, cl_name: String):
 	return text
 
 static func get_parents_class_name(node: Node):
-	var results = []
-	var parent = null
 	if not node: return []
-	if node.get_script() and node.get_script().get_path():
-		results.append(get_custom_class_name(node.get_script().get_path()))
-		parent = node.get_script().get_base_script()
-		while(parent != null):
-			results.append(get_custom_class_name(parent.get_path()))
-			if parent.get_base_script() == null:
-				results.append(parent.get_instance_base_type())
-				var type_parent = ClassDB.get_parent_class(parent.get_instance_base_type())
-				results.append(type_parent)
-				while(type_parent != "Object"):
-					results.append(type_parent)
-					type_parent = ClassDB.get_parent_class(type_parent)
-				parent = null
-	else:
-		results.append(node.get_class().get_basename())
-		var type_parent = ClassDB.get_parent_class(node.get_class().get_basename())
-		while(type_parent != "Object"):
-			results.append(type_parent)
-			type_parent = ClassDB.get_parent_class(type_parent)
+	var results = []
+	var parent = str(node.get_class())
+	if node.get_script():
+		parent = node.get_script()
+	var i = 0
+	while parent != null:
+		if parent is String:
+			results.append(parent)
+			if parent == &"Object":
+				break
+			parent = str(ClassDB.get_parent_class(parent))
+		elif parent is Script:
+			results.append(str(parent.get_global_name()))
+			parent = parent.get_base_script() if parent.get_base_script() else str(parent.get_instance_base_type())
 	return results
 
 static func get_class_name(node: Node) -> String:
@@ -61,6 +70,11 @@ static func get_component_script_name(node: Node):
 static func remove_component(node: Node):
 	var file = DirAccess.remove_absolute("res://addons/componentable/components/%sComponent.gd" % node.get_class().get_basename())
 
+static func get_properties(node: Node):
+	if not node.get_script():
+		return []
+	return node.get_script().get_script_property_list().filter(func (p): return p['usage'] & PROPERTY_USAGE_STORAGE)
+
 static func get_components(node: Node):
 	var parents = get_parents_class_name(node).map(func (cl_name): return "%sComponent" % cl_name)
 	return ProjectSettings.get_global_class_list() \
@@ -70,9 +84,17 @@ static func get_class_component(component_name: String):
 	return ProjectSettings.get_global_class_list() \
 		.filter(func (cls): return cls.class == component_name)[0]
 
+static func delete_component(path: String):
+	DirAccess.remove_absolute(path)
+	EditorInterface.get_resource_filesystem().scan()
+
 static func create_component_file(path: String, name: String, node: Node):
 	create_component(node)
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string("class_name %s extends %s" % [name.split(".")[0], get_component_script_name(node)])
 	file.close()
+	EditorInterface.get_resource_filesystem().scan()
 	EditorInterface.edit_script(load(path))
+
+static func is_valid(path: String):
+	return FileAccess.file_exists(path)

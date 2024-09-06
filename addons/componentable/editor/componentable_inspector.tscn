@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/componentable/editor/componentable_inspector.gd" id="1_jiawe"]
 
-[node name="Componentable" type="Tree" node_paths=PackedStringArray("file_dialog", "remove_component_dialog")]
+[node name="Componentable" type="Tree" node_paths=PackedStringArray("file_dialog", "remove_component_dialog", "delete_component_dialog")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,6 +16,7 @@ hide_root = true
 script = ExtResource("1_jiawe")
 file_dialog = NodePath("SaveComponent")
 remove_component_dialog = NodePath("RemoveComponent")
+delete_component_dialog = NodePath("DeleteComponent")
 metadata/components = {}
 
 [node name="SaveComponent" type="FileDialog" parent="."]
@@ -29,3 +30,10 @@ initial_position = 2
 size = Vector2i(481, 100)
 ok_button_text = "Remove"
 dialog_text = "Do you want to remove this component from the node?"
+
+[node name="DeleteComponent" type="ConfirmationDialog" parent="."]
+auto_translate_mode = 1
+initial_position = 2
+size = Vector2i(481, 100)
+ok_button_text = "Delete"
+dialog_text = "Do you want to delete this component from the project?"

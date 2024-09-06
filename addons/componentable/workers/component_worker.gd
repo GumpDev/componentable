@@ -41,9 +41,9 @@ static func subscribe(node: Node, component_name: String):
 	if not is_componentable(node):
 		componentable(node)
 	
-	var component = Node.new()
-	component.set_script(load(ComponentableFs.get_class_component(component_name).path))
+	var component = Node.new() 
 	component.name = component_name
+	component.set_script(load(ComponentableFs.get_class_component(component_name).path))
 	component.set_meta(COMPONENT_META, true)
 	
 	create_components_node(node)

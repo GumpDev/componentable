@@ -1,3 +1,4 @@
+@icon("res://addons/componentable/icons/Component.svg")
 class_name Node2DComponent extends Node
 
 @export var active = true : set = _set_active
