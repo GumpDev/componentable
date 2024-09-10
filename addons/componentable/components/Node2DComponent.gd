@@ -9,3 +9,4 @@ func _set_active(_active: bool):
 	set_process(active)
 	set_process_input(active)
 	set_physics_process(active)
+	
