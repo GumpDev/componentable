@@ -1,104 +1,39 @@
-[gd_scene load_steps=4 format=3 uid="uid://daql0s3l8p0up"]
+[gd_scene load_steps=2 format=3 uid="uid://daql0s3l8p0up"]
 
 [ext_resource type="Script" path="res://addons/componentable/editor/componentable_inspector.gd" id="1_jiawe"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmh8b"]
-bg_color = Color(0.266667, 0.266667, 0.266667, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="LabelSettings" id="LabelSettings_v8aho"]
-font_size = 12
-font_color = Color(0.823529, 0.823529, 0.823529, 1)
-outline_size = 1
-
-[node name="Componentable" type="VBoxContainer" node_paths=PackedStringArray("componentable_btn", "recomponentable_btn", "non_componentable", "components_list", "componentable_display")]
+[node name="Componentable" type="Tree" node_paths=PackedStringArray("file_dialog", "remove_component_dialog", "delete_component_dialog")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_jiawe")
-componentable_btn = NodePath("NonComponentableList/Button")
-recomponentable_btn = NodePath("IsComponentable/ResetComponentable")
-non_componentable = NodePath("NonComponentableList")
-components_list = NodePath("IsComponentable/ComponentableList")
-componentable_display = NodePath("IsComponentable")
-
-[node name="IsComponentable" type="VBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="ComponentableList" type="VBoxContainer" parent="IsComponentable"]
-layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+column_titles_visible = true
+enable_recursive_folding = false
+hide_root = true
+script = ExtResource("1_jiawe")
+file_dialog = NodePath("SaveComponent")
+remove_component_dialog = NodePath("RemoveComponent")
+delete_component_dialog = NodePath("DeleteComponent")
 metadata/components = {}
 
-[node name="Title" type="Panel" parent="IsComponentable/ComponentableList"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cmh8b")
+[node name="SaveComponent" type="FileDialog" parent="."]
+initial_position = 2
+size = Vector2i(303, 180)
+dialog_hide_on_ok = true
+filters = PackedStringArray("*.gd")
 
-[node name="Label" type="Label" parent="IsComponentable/ComponentableList/Title"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 4
-text = "Components"
-label_settings = SubResource("LabelSettings_v8aho")
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/components = {}
+[node name="RemoveComponent" type="ConfirmationDialog" parent="."]
+initial_position = 2
+size = Vector2i(481, 100)
+ok_button_text = "Remove"
+dialog_text = "Do you want to remove this component from the node?"
 
-[node name="Title" type="Panel" parent="IsComponentable"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cmh8b")
-
-[node name="Label" type="Label" parent="IsComponentable/Title"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 4
-text = "Componentable"
-label_settings = SubResource("LabelSettings_v8aho")
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/components = {}
-
-[node name="ResetComponentable" type="Button" parent="IsComponentable"]
-layout_mode = 2
-text = "Reset Componentable"
-
-[node name="NonComponentableList" type="VBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="Title" type="Panel" parent="NonComponentableList"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cmh8b")
-
-[node name="Label" type="Label" parent="NonComponentableList/Title"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 4
-text = "Componentable"
-label_settings = SubResource("LabelSettings_v8aho")
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/components = {}
-
-[node name="Button" type="Button" parent="NonComponentableList"]
-layout_mode = 2
-text = "Create Componentable"
+[node name="DeleteComponent" type="ConfirmationDialog" parent="."]
+auto_translate_mode = 1
+initial_position = 2
+size = Vector2i(481, 100)
+ok_button_text = "Delete"
+dialog_text = "Do you want to delete this component from the project?"

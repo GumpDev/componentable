@@ -38,9 +38,12 @@ static func has_component(node: Node, component_name: String):
 	return get_all_components(node).has(component_name)
 	
 static func subscribe(node: Node, component_name: String):
-	var component = Node.new()
-	component.set_script(load(ComponentableFs.get_class_component(component_name).path))
+	if not is_componentable(node):
+		componentable(node)
+	
+	var component = Node.new() 
 	component.name = component_name
+	component.set_script(load(ComponentableFs.get_class_component(component_name).path))
 	component.set_meta(COMPONENT_META, true)
 	
 	create_components_node(node)
@@ -55,9 +58,6 @@ static func subscribe(node: Node, component_name: String):
 	node.set_meta(COMPONENTS_META, components)
 
 static func unsubscribe(node: Node, component_name: String):
-	if not is_componentable(node):
-		push_error("%s not is a componentable node!" % node.name)
-		return
 	var components: Dictionary = get_all_components(node)
 	node.get_node(components[component_name]).queue_free()
 	components.erase(component_name)
@@ -80,7 +80,3 @@ static func find(node: Node, component_name: String):
 
 static func node_is_component(node: Node):
 	return node.has_meta(COMPONENT_META)
-
-static func reset_componentable(node: Node):
-	uncomponentable(node)
-	componentable(node)
