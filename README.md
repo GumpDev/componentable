@@ -10,6 +10,19 @@ A Godot Plugin to create generic components to your project's logic to make bett
 
 <br>
 
+### New Version 2.0
+
+- Added new UI tab for componentable, easy to create, modify components and see current values
+- Automatic creation of componentable and components
+- New icons for components
+- Many bugs fixed
+
+#### Future plans
+
+- Create a UI Editor for all values from components, so you don't need to select component nodes to change values
+
+<br>
+
 ## Table of Contents
 
 - [📟 What is Componentable?](#what-is-componatable)
@@ -54,41 +67,19 @@ The componentable flow is the componentable will always be required, so when you
 
 ## 📝 Getting Started
 
-### Creating a Componentable
-
-To start just select a node and in the inspector click on `Create Componentable`
-
-![Inspector with a Create Componentable Button](images/create_componentable.png)
-
-Then will be create a Component Script for your node, and your node will be ready to have components
-
-In this example, the Component Script created will be `PlayerComponent`, because de class_name of the script in this node is Progress.
-
-> Node don't need to have a script, componentable can be used with build-in types
-
-<br>
-
 ### Creating a Component
 
-Just create a Script with a `class_name` and extends `PlayerComponent`, then you can place the behaviour you want inside this component.
+To start just select a node and in the "Componentable" tab click on `Create Componentable`
 
-in the `PlayerComponent` we have:
-
-```godot
-class_name PlayerComponent extends Node
-
-@export var active = true
-@export var player: Player
-```
-
-so we can access the player using the `player` variable.
-
-<br>
+Then select a path and a name to your component, will create a Componen
+> Node don't need to have a script, componentable can be used with build-in types
 
 So for in our component example `Glowing` will make the player glow with:
 
 ```godot
 class_name Glowing extends PlayerComponent
+
+#You can access the variable player to get the parent of this component, that is a class named Player
 
 func _ready():
 	if active: # active is a variable inside PlayerComponent to make some enabling behaviours
@@ -152,12 +143,6 @@ Component.unsubscribe(node, "ComponentName")
 ### Some others functions
 
 ```godot
-Component.componentable(node) # will create a Component Script if don't exists to this node, and define this node as a componentable
-
-Component.uncomponentable(node) # will make this node not a Componentable any more
-
-Component.is_componentable(node) # return true if this node is a componentable
-
 Component.has(node, "component") # return true if this componentable have this component
 
 Component.get_all(node) # return all components in this componentable
