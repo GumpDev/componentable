@@ -51,8 +51,7 @@ func _button_click(item: TreeItem, column: int, id: int, mouse_button_index: int
 		3: 
 			if item.get_metadata(0)['type'] != "component": return
 			var component = Component.find(node, item.get_metadata(0)['component'])
-			EditorInterface.inspect_object(component, "active")
-			EditorInterface.get_inspector().grab_focus()
+			EditorInterface.inspect_object(component)
 
 func _selected_nodes():
 	var nodes = EditorInterface.get_selection().get_selected_nodes()
