@@ -10,7 +10,7 @@ A Godot Plugin to create generic components to your project's logic to make bett
 
 <br>
 
-### New Version 2.0
+### ✨ New Version 2.0 ✨
 
 - Added new UI tab for componentable, easy to create, modify components and see current values
 - Automatic creation of componentable and components
@@ -21,6 +21,7 @@ A Godot Plugin to create generic components to your project's logic to make bett
 
 - Create a UI Editor for all values from components, so you don't need to select component nodes to change values
 
+<br>
 <br>
 
 ## Table of Contents
