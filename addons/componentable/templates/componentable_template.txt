@@ -2,7 +2,7 @@
 class_name <Type>Component extends Node
 
 @export var active = true : set = _set_active
-var <type>: <Type>
+@export var <type>: <Type> = $"../.."
 
 func _set_active(_active: bool):
 	active = _active
