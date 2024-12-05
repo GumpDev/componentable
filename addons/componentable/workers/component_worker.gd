@@ -1,9 +1,9 @@
-class_name ComponentWorker extends Object
+extends Node
 
 const COMPONENTS_META = "components"
 const COMPONENT_META = "component"
 
-static func create_components_node(node: Node):
+func create_components_node(node: Node):
 	if not node.has_node("components"):
 		var components_node = Node.new()
 		components_node.set_name("components")
@@ -11,33 +11,33 @@ static func create_components_node(node: Node):
 		node.add_child(components_node)
 		components_node.set_owner(EditorInterface.get_edited_scene_root())
 
-static func remove_components_node(node: Node):
+func remove_components_node(node: Node):
 	if len(get_all_components(node)) == 0:
 		var components_node = node.get_node("components")
 		if components_node:
 			components_node.queue_free()
 
-static func componentable(node: Node):
+func componentable(node: Node):
 	if not is_componentable(node):
 		node.set_meta(COMPONENTS_META, {})
 	ComponentableFs.create_component(node)
 		
-static func uncomponentable(node: Node):
+func uncomponentable(node: Node):
 	if is_componentable(node):
 		var components_node = node.get_node("components")
 		if components_node: components_node.queue_free()
 		node.remove_meta(COMPONENTS_META)
 
-static func is_componentable(node: Node):
+func is_componentable(node: Node):
 	if node != null:
 		return node.has_meta(COMPONENTS_META)
 	return null
 
-static func has_component(node: Node, component_name: String):
+func has_component(node: Node, component_name: String):
 	if not is_componentable(node): return false
 	return get_all_components(node).has(component_name)
 	
-static func subscribe(node: Node, component_name: String):
+func subscribe(node: Node, component_name: String):
 	if not is_componentable(node):
 		componentable(node)
 	
@@ -57,20 +57,20 @@ static func subscribe(node: Node, component_name: String):
 	components[component_name] = node.get_path_to(component)
 	node.set_meta(COMPONENTS_META, components)
 
-static func unsubscribe(node: Node, component_name: String):
+func unsubscribe(node: Node, component_name: String):
 	var components: Dictionary = get_all_components(node)
 	node.get_node(components[component_name]).queue_free()
 	components.erase(component_name)
 	node.set_meta(COMPONENTS_META, components)
 	remove_components_node(node)
 
-static func get_all_components(node: Node) -> Dictionary:
+func get_all_components(node: Node) -> Dictionary:
 	if not is_componentable(node):
 		push_error("%s not is a componentable node!" % node.name)
 		return {}
 	return node.get_meta(COMPONENTS_META)
 
-static func find(node: Node, component_name: String):
+func find(node: Node, component_name: String):
 	if not is_componentable(node):
 		push_error("%s not is a componentable node!" % node.name)
 		return null
@@ -78,5 +78,5 @@ static func find(node: Node, component_name: String):
 		return null
 	return node.get_node(get_all_components(node)[component_name])
 
-static func node_is_component(node: Node):
+func node_is_component(node: Node):
 	return node.has_meta(COMPONENT_META)
